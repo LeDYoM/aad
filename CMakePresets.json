@@ -1,0 +1,17 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+      "major": 3,
+      "minor": 23,
+      "patch": 0
+    },
+    "configurePresets": [
+      {
+        "name": "vs2022windows",
+        "displayName": "Visual Stdudio 17 x64 2022 Windows",
+        "description": "Visual Stdudio 17 x64 2022 Windows",
+        "generator": "Visual Studio 17 2022",
+        "binaryDir": "${sourceDir}/../${presetName}"
+      }
+    ]
+  }
