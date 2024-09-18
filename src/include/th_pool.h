@@ -52,7 +52,7 @@ public:
     }
 
 private:
-    std::vector<std::thread> workers;         // Threads in the pool
+    std::vector<std::jthread> workers;         // Threads in the pool
     std::queue<std::function<void()>> tasks;  // Task queue
 
     std::mutex queueMutex;              // Synchronization
