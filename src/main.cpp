@@ -11,7 +11,7 @@ void exampleTask(int id, int sleepTime)
 int main()
 {
     // Create a thread pool with 4 worker threads
-    ThreadPool pool(4);
+    aad::ThreadPool pool(4);
 
     // Enqueue and execute some tasks
     for (int i = 1; i <= 8; ++i)
@@ -19,9 +19,9 @@ int main()
         pool.enqueue(exampleTask, i, i * 100);
     }
 
-    for (int i = 9; i <= 18; ++i)
+    for (int i = 9; i <= 180; ++i)
     {
-        pool.enqueue(exampleTask, i, i * 10);
+        pool.enqueue(exampleTask, i, 10);
     }
 
     // The thread pool will automatically clean up in its destructor

@@ -1,11 +1,13 @@
 #include "include/th_pool.h"
 
+namespace aad
+{
 ThreadPool::ThreadPool(const size_t numThreads) : stop{false}
 {
     for (size_t i{0U}; i < numThreads; ++i)
     {
         workers.emplace_back([this]() {
-            while(!stop)
+            while (!stop)
             {
                 std::function<void()> task;
                 {
@@ -40,3 +42,5 @@ ThreadPool::~ThreadPool()
     }
     condition.notify_all();  // Notify all threads to stop
 }
+
+}  // namespace aad

@@ -1,5 +1,5 @@
-#ifndef THREAD_POOL_H
-#define THREAD_POOL_H
+#ifndef THREAD_POOL_INCLUDE_H
+#define THREAD_POOL_INCLUDE_H
 
 #include <vector>
 #include <queue>
@@ -11,6 +11,8 @@
 #include <atomic>
 #include <type_traits>
 
+namespace aad
+{
 class ThreadPool
 {
 public:
@@ -63,5 +65,6 @@ auto ThreadPool::enqueue(F&& f, Args&&... args)
     condition.notify_one();
     return res;
 }
+}  // namespace aad
 
 #endif
