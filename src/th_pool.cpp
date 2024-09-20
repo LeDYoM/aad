@@ -4,8 +4,8 @@ namespace aad
 {
 ThreadPool::ThreadPool(const size_t numThreads) : stop{false}
 {
-    auto main_worker{[this]() {
-        while (!stop)
+    auto main_worker{[this]() -> void {
+        while (!stop) [[unlikely]]
         {
             std::function<void()> task;
             {
@@ -14,7 +14,7 @@ ThreadPool::ThreadPool(const size_t numThreads) : stop{false}
                 // Wait until the queue has tasks or stop is requested
                 condition.wait(lock, [this] { return stop || !tasks.empty(); });
 
-                if (stop)
+                if (stop) [[unlikely]]
                 {
                     return;  // If stopped and no tasks, exit the thread
                 }
