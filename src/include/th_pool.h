@@ -10,6 +10,7 @@
 #include <future>
 #include <atomic>
 #include <type_traits>
+#include <array>
 
 namespace aad
 {
