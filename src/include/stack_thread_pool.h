@@ -18,13 +18,13 @@ template <std::size_t kMaxQueueSize>
 class StackThreadPool
 {
 public:
-    explicit StackThreadPool(const size_t numThreads)
+    explicit StackThreadPool(const size_t numThreads = kMaxQueueSize)
     {
         for (size_t i{0U}; i < numThreads; ++i)
         {
             std::jthread p{[this]() -> void {
                 while (!stop)
-                    [[unlikely]]
+                    [[likely]]
                     {
                         std::function<void()> task;
                         {
@@ -49,6 +49,7 @@ public:
                         task();
                     }
             }};
+
             workers[i] = std::move(p);
         }
     }

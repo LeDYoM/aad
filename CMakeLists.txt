@@ -9,6 +9,7 @@ project(
 add_executable(aad)
 
 target_sources(aad PRIVATE src/include/th_pool.h
+                           src/include/stack_thread_pool.h
                            src/th_pool.cpp)
 
 target_sources(aad PRIVATE src/main.cpp)

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <chrono>
 #include "include/th_pool.h"
+#include "include/stack_thread_pool.h"
 
 int exampleTask(int id, int sleepTime)
 {
@@ -11,6 +12,7 @@ int exampleTask(int id, int sleepTime)
 
 int main()
 {
+/*
     // Create a thread pool with 4 worker threads
     aad::ThreadPool pool(4);
 
@@ -22,6 +24,22 @@ int main()
     }
 
     for (int i = 0; i < 100; ++i)
+    {
+        const int result{results[i].get()};
+        std::cout << "Task " << i << " returned " << result << " \n";
+    }
+*/
+    // Create a thread pool with 4 worker threads
+    aad::StackThreadPool<4> pool;
+
+    std::vector<std::future<int>> results;
+    // Enqueue and execute some tasks
+    for (int i = 0; i < 10; ++i)
+    {
+        results.emplace_back(pool.enqueue(exampleTask, i, i * 10));
+    }
+
+    for (int i = 0; i < 10; ++i)
     {
         const int result{results[i].get()};
         std::cout << "Task " << i << " returned " << result << " \n";
