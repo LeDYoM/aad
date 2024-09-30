@@ -82,14 +82,7 @@ public:
             // Lock the queue to push the new task
             std::unique_lock<std::mutex> lock{queueMutex};
 
-            // Don't allow enqueueing after stopping the pool
-            if (stop)
-            {
-                throw std::runtime_error("Enqueue on stopped ThreadPool");
-            }
-
             // Add the task to the queue
-
             tasks.emplace([t = std::move(task)]() { (*t)(); });
         }
 
@@ -104,7 +97,7 @@ private:
 
     std::mutex queueMutex;              // Synchronization
     std::condition_variable condition;  // Condition variable to notify workers
-    std::atomic<bool> stop;             // To stop all threads
+    std::atomic<bool> stop{false};            // To stop all threads
 };
 
 }  // namespace aad

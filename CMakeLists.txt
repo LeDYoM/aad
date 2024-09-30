@@ -15,7 +15,7 @@ target_sources(aad PRIVATE src/include/th_pool.h
 target_sources(aad PRIVATE src/main.cpp)
 
 set_target_properties(aad PROPERTIES
-    CXX_STANDARD 20
+    CXX_STANDARD 23
     CXX_STANDARD_REQUIRED ON
     CXX_EXTENSIONS OFF
     POSITION_INDEPENDENT_CODE ON)
