@@ -14,6 +14,14 @@
 
 namespace aad
 {
+namespace detail
+{
+    template <std::size_t kMaxQueueSize>
+    struct ContainerTypeToUse
+    {
+//        using type = std::array<
+    };
+}
 template <std::size_t kMaxQueueSize>
 class StackThreadPool
 {
