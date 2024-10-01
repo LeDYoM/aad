@@ -1,5 +1,5 @@
-#ifndef STACK_THREAD_POOL_INCLUDE_H
-#define STACK_THREAD_POOL_INCLUDE_H
+#ifndef AAD_STACK_THREAD_POOL_INCLUDE_H
+#define AAD_STACK_THREAD_POOL_INCLUDE_H
 
 #include <vector>
 #include <queue>
@@ -11,15 +11,18 @@
 #include <atomic>
 #include <type_traits>
 #include <array>
+#include "container_type.h"
 
 namespace aad
 {
 template <std::size_t kMaxQueueSize>
-class StackThreadPool
+class StackThreadPool : private ContainerTypeToUse<std::jthread, kMaxQueueSize>
 {
 public:
     explicit StackThreadPool(const size_t numThreads = kMaxQueueSize)
     {
+        reserveAndFit(workers, numThreads);
+
         for (size_t i{0U}; i < numThreads; ++i)
         {
             std::jthread p{[this]() -> void {
@@ -36,12 +39,11 @@ public:
                                 return stop || !tasks.empty();
                             });
 
-                            if (stop)
-                                [[unlikely]]
-                                {
-                                    return;  // If stopped and no tasks, exit
-                                             // the thread
-                                }
+                            if (stop) [[unlikely]]
+                            {
+                                return;  // If stopped and no tasks, exit
+                                         // the thread
+                            }
                             // Get the next task from the queue
                             task = std::move(tasks.front());
                             tasks.pop();
@@ -93,28 +95,9 @@ public:
     }
 
 private:
-    namespace detail
-    {
-    template <typename T, std::size_t kMaxQueueSize>
-    struct ContainerTypeToUse
-    {
-        using type = std::array<T, kMaxQueueSize>;
-    };
-
-    template <typename T>
-    struct ContainerTypeToUse<T, 0U>
-    {
-        using type = std::vector<T>;
-    };
-
-    static_assert(
-        std::is_same_v<ContainerTypeToUse<int, 0>::type, std::vector<int>>);
-    static_assert(
-        std::is_same_v<ContainerTypeToUse<int, 1>::type, std::array<int, 1>>);
-    }  // namespace detail
-
-    std::array<std::jthread, kMaxQueueSize> workers;  // Threads in the pool
-    std::queue<std::function<void()>> tasks;          // Task queue
+    ContainerTypeToUse<std::jthread, kMaxQueueSize>::type
+        workers;                              // Threads in the pool
+    std::queue<std::function<void()>> tasks;  // Task queue
 
     std::mutex queueMutex;              // Synchronization
     std::condition_variable condition;  // Condition variable to notify workers
