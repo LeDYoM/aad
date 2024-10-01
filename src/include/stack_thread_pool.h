@@ -18,10 +18,11 @@ namespace aad
 template <std::size_t kMaxQueueSize>
 class StackThreadPool : private ContainerTypeToUse<std::jthread, kMaxQueueSize>
 {
+    using ct = ContainerTypeToUse<std::jthread, kMaxQueueSize>;
 public:
     explicit StackThreadPool(const size_t numThreads = kMaxQueueSize)
     {
-        reserveAndFit(workers, numThreads);
+        ct::reserveAndFit(workers, numThreads);
 
         for (size_t i{0U}; i < numThreads; ++i)
         {
@@ -103,6 +104,8 @@ private:
     std::condition_variable condition;  // Condition variable to notify workers
     std::atomic<bool> stop{false};      // To stop all threads
 };
+
+using ThreadPool = StackThreadPool<0U>;
 
 }  // namespace aad
 
