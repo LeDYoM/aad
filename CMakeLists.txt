@@ -19,3 +19,5 @@ set_target_properties(aad PROPERTIES
     CXX_STANDARD_REQUIRED ON
     CXX_EXTENSIONS OFF
     POSITION_INDEPENDENT_CODE ON)
+
+add_subdirectory(tests)
