@@ -19,6 +19,7 @@ template <std::size_t kMaxQueueSize>
 class StackThreadPool : private ContainerTypeToUse<std::jthread, kMaxQueueSize>
 {
     using ct = ContainerTypeToUse<std::jthread, kMaxQueueSize>;
+
 public:
     explicit StackThreadPool(const size_t numThreads = kMaxQueueSize)
     {
